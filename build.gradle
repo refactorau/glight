@@ -1,0 +1,16 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+version = '1.0'
+mainClassName = "au.com.refactor.BuildWatcher"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.7'
+    compile 'com.codeminders:hidapi:1.1'
+}
