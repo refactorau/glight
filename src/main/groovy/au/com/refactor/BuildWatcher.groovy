@@ -11,6 +11,5 @@ class BuildWatcher {
         HIDManager hidManager = HIDManager.getInstance();
         println hidManager.listDevices()
         HIDDevice dev = hidManager.openById(4037, 45184, null)
-        dev.
     }
 }
