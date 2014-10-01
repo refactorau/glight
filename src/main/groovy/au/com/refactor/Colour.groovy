@@ -1,6 +1,6 @@
 package au.com.refactor
 
-public enum Color {
+public enum Colour {
     BLACK((byte)0xFF),
     GREEN((byte)0xFE), // depending on device might also be blue
     RED ((byte)0xFD),
@@ -9,7 +9,7 @@ public enum Color {
 
     private byte code
 
-    private Color(byte c) {
+    private Colour(byte c) {
         code = c
     }
 
