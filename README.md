@@ -24,5 +24,5 @@ Acknowledgements
 Thanks to the following
 
 * https://code.google.com/p/javahidapi - great little wrapper for the hid libraries
-* https://github.com/cibuddy - works beautifully but is so heavyweight for what I needed and is OSGI (yuk - sorry OSGI lovers). The code was useful to work out the codes though!
+* https://github.com/cibuddy/cibuddy - works beautifully but is so heavyweight for what I needed and is OSGI (yuk - sorry OSGI lovers). The code was useful to work out the codes though!
 * Andrew Purcell for loaning me the Delcom light to play with
