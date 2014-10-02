@@ -34,9 +34,11 @@ TODO
 
 	Exception in thread "main" com.codeminders.hidapi.HIDDeviceNotFoundException
 
-Make sure you install your native HID library (see prequisites)
+Make sure you install the HID library installed. Did you actually plug it in?
 
 	Exception in thread "main" java.lang.NullPointerException: Cannot invoke method sendFeatureReport() on null object
+
+Did you add the udev rule?
 
 ## Acknowledgements
 
