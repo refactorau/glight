@@ -1,0 +1,3 @@
+jenkins.server=http://jenkins.company.com:8080/cc.xml
+jenkins.user=user
+jenkins.password=password

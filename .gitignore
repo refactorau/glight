@@ -3,3 +3,6 @@ build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
+
+# ignore gradle properties as it potentially has passwords in it - use the template
+gradle.properties 

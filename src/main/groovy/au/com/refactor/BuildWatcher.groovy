@@ -7,14 +7,14 @@ import com.codeminders.hidapi.HIDManager
 class BuildWatcher {
 
     private final byte[] SET_STRUCTURE = [
-        (byte) 0x65,
-        (byte) 0x02,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00
+            (byte) 0x65,
+            (byte) 0x02,
+            (byte) 0x00,
+            (byte) 0x00,
+            (byte) 0x00,
+            (byte) 0x00,
+            (byte) 0x00,
+            (byte) 0x00
     ]
 
     private final int SET_BYTE = 2;
@@ -31,11 +31,7 @@ class BuildWatcher {
 //        println hidManager.listDevices()
         device = hidManager.openById(4037, 45184, null)
 
-        red()
-        sleep(1000)
-        green()
-        sleep(1000)
-        off()
+        demo()
     }
 
     void setColour(Colour colour) {
@@ -53,7 +49,21 @@ class BuildWatcher {
         setColour(Colour.GREEN)
     }
 
+    void blue() {
+        setColour(Colour.GREEN)
+    }
+
     void off() {
         setColour(Colour.BLACK)
     }
+
+    void demo() {
+        while (true) {
+            [Colour.RED, Colour.BLUE, Colour.GREEN ].each {
+                setColour(it)
+                sleep(1000)
+            }
+        }
+    }
+
 }
