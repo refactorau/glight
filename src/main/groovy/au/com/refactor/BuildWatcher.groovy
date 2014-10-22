@@ -34,6 +34,8 @@ class BuildWatcher {
 
     public static void main(String[] args) {
 
+
+
         String server = System.properties['jenkins.server']
         String port = System.properties['jenkins.port']
         String user = System.properties['jenkins.user']
@@ -68,18 +70,22 @@ class BuildWatcher {
     }
 
     void red() {
+        println('Red')
         setColour(Colour.RED)
     }
 
     void green() {
+        println('Green')
         setColour(Colour.GREEN)
     }
 
     void blue() {
-        setColour(Colour.GREEN)
+        println('Blue')
+        setColour(Colour.BLUE)
     }
 
     void off() {
+        println('Off')
         setColour(Colour.BLACK)
     }
 
@@ -94,7 +100,8 @@ class BuildWatcher {
 
     void watch() {
         while (true) {
-            checkBuildAndSignal(this.&red, this.&green, this.&blue)
+            println("Checking...")
+            checkBuildAndSignal(this.&green, this.&red, this.&blue)
             sleep(30000)
         }
     }
@@ -115,15 +122,21 @@ class BuildWatcher {
         def get = new GetMethod(url)
         get.doAuthentication = true
 
-        int result = client.executeMethod(get)
+        try {
+            int result = client.executeMethod(get)
 
-        if (result == 200) {
-            if (isBuildSuccess(get.getResponseBodyAsString())) {
-                success()
+            if (result == 200) {
+                if (isBuildSuccess(get.getResponseBodyAsString())) {
+                    success()
+                } else {
+                    fail()
+                }
             } else {
-                fail()
+                unknown()
             }
-        } else {
+        }
+        catch(UnknownHostException uhe) {
+            uhe.printStackTrace()
             unknown()
         }
     }
