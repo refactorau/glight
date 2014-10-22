@@ -10,7 +10,14 @@ repositories {
     mavenCentral()
 }
 
+run {
+    systemProperties = System.getProperties()
+}
+
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.7'
     compile 'com.codeminders:hidapi:1.1'
+    compile 'commons-httpclient:commons-httpclient:3.1'
+    testCompile 'junit:junit:4.11'
+    testCompile 'com.github.tomakehurst:wiremock:1.51'
 }

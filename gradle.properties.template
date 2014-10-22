@@ -1,3 +1,4 @@
-jenkins.server=http://jenkins.company.com:8080/cc.xml
-jenkins.user=user
-jenkins.password=password
+systemProp.jenkins.server=jenkins.company.com
+systemProp.jenkins.port=8080
+systemProp.jenkins.user=user
+systemProp.jenkins.api.token=password

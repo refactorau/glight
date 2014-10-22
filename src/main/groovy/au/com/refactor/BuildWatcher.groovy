@@ -1,8 +1,15 @@
 package au.com.refactor
 
+import org.apache.commons.httpclient.*
+
+import org.apache.commons.httpclient.auth.*
+import org.apache.commons.httpclient.methods.*
+
 import com.codeminders.hidapi.ClassPathLibraryLoader
 import com.codeminders.hidapi.HIDDevice
 import com.codeminders.hidapi.HIDManager
+
+import javax.swing.plaf.ButtonUI
 
 class BuildWatcher {
 
@@ -20,18 +27,37 @@ class BuildWatcher {
     private final int SET_BYTE = 2;
     private Colour currentColour = Colour.BLACK
     private HIDDevice device
+    private String server, url, user, token
+    private int port
+    private HttpClient client
+
 
     public static void main(String[] args) {
-        new BuildWatcher()
+
+        String server = System.properties['jenkins.server']
+        String port = System.properties['jenkins.port']
+        String user = System.properties['jenkins.user']
+        String token = System.properties['jenkins.api.token']
+
+        BuildWatcher bw = new BuildWatcher(server, Integer.parseInt(port), user, token)
+
+        bw.watch()
+
     }
 
-    BuildWatcher() {
+    BuildWatcher(String server, int port, String user, String token) {
+
+        this.server = server
+        this.port = port
+        this.user = user
+        this.token = token
+        this.url = "http://${server}:${port}/cc.xml"
+
         ClassPathLibraryLoader.loadNativeHIDLibrary()
         HIDManager hidManager = HIDManager.getInstance();
 //        println hidManager.listDevices()
         device = hidManager.openById(4037, 45184, null)
-
-        demo()
+        client = createClient()
     }
 
     void setColour(Colour colour) {
@@ -59,11 +85,52 @@ class BuildWatcher {
 
     void demo() {
         while (true) {
-            [Colour.RED, Colour.BLUE, Colour.GREEN ].each {
+            [Colour.RED, Colour.BLUE, Colour.GREEN].each {
                 setColour(it)
                 sleep(1000)
             }
         }
     }
 
+    void watch() {
+        while (true) {
+            checkBuildAndSignal(this.&red, this.&green, this.&blue)
+            sleep(30000)
+        }
+    }
+
+    private HttpClient createClient() {
+        // only do this if client not initialised
+        def client = new HttpClient()
+        client.state.setCredentials(
+                new AuthScope(server, port, "realm"),
+                new UsernamePasswordCredentials(user, token)
+        )
+        client.params.authenticationPreemptive = true
+        return client
+    }
+
+    void checkBuildAndSignal(Closure success, Closure fail, Closure unknown) {
+
+        def get = new GetMethod(url)
+        get.doAuthentication = true
+
+        int result = client.executeMethod(get)
+
+        if (result == 200) {
+            if (isBuildSuccess(get.getResponseBodyAsString())) {
+                success()
+            } else {
+                fail()
+            }
+        } else {
+            unknown()
+        }
+    }
+
+    static boolean isBuildSuccess(String xml) {
+        def projects = new XmlSlurper().parseText(xml)
+        def failCount = projects.Project.findAll { it.@lastBuildStatus == 'Failure' }.size()
+        return failCount == 0
+    }
 }
